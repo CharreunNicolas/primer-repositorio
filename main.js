@@ -1,5 +1,5 @@
 $(document).ready(function(){
-   const render = document.getElementById('render-pokemones');
+   const render = document.querySelector('.render-pokemones');
    const url = "https://pokeapi.co/api/v2/pokemon";
 
    $.get(url, function(data){
@@ -18,41 +18,52 @@ $(document).ready(function(){
          $.get(pokemon.url, function(response){
                         
             pokemon.imagen = response.sprites.front_default;
-             
             
             let img = document.createElement('img');
             img.src = pokemon.imagen;
-            img.className = "img-pokemon";
-            let titulo = document.createElement('h2');
-            titulo.innerHTML = pokemon.nombre;
-            titulo.className = "titulo-pokemon text-break";
-            const divCaja = document.createElement('div');
-            divCaja.className = "div-pokemon";
+            img.className = "card-img-top caja-img bg-success";
 
+            let titulo = document.createElement('div');
+            titulo.innerHTML = pokemon.nombre;
+            titulo.className = "card-body text-break text-center text-white text-uppercase";
+         
+            const divCaja = document.createElement('div');
+            divCaja.className = "card caja-pokemon bg-success border border-1 my-1 container-fluid col-12 col-md-6 col-lg-4";
+            
             divCaja.append(titulo);
             divCaja.append(img);
             render.appendChild(divCaja);
-         });
 
+         });
+//
          $.get(pokemon.url, function(response){
-             //Box de busqueda
-             const boton = document.getElementById('boton');
- 
-             boton.addEventListener('click', e=>{
+             //Llamado al DOM 
+            const boton = document.getElementById('boton');
+
+         boton.addEventListener('click', e=>{
+             
+             e.preventDefault();
+             //Llamado al DOM 
              const inputPokemon = document.getElementById('input-pokemon');
-             const imgPokemon = document.getElementById('imagen-buscador');
-             const namePokemon = document.getElementById('nombre-buscador');
-             const habilidadPokemon = document.getElementById('habilidad-buscador');
+
+             console.clear();
+             console.log(inputPokemon.value);
+         
              let buscarNombre = inputPokemon.value;
- 
-             if(buscarNombre === response.name){
-               imgPokemon.src = response.sprites.front_default;
-               namePokemon.innerHTML = response.name;
-               habilidadPokemon.innerHTML = "ABILITY: " + response.abilities[0].ability.name;                 
+
+             if(buscarNombre === response.name || buscarNombre === response.name.toUpperCase()){
+             
+               const nombrePokemon = document.querySelector('.nombrePokemon');
+               const atributoPokemon = document.getElementById('atributoPokemon');
+               const img = document.getElementById('img');
+
+               nombrePokemon.innerHTML = `¡Has atrapado a ${buscarNombre}!`;
+               nombrePokemon.style.color = "green";
+               atributoPokemon.innerHTML = "Habilidad: " + response.abilities[0].ability.name;
+               img.src = response.sprites.front_default;
              }
-              //console.log(response.abilities[0].ability.name);
-             });
-         })
+            });
+         });
 
         
       });
